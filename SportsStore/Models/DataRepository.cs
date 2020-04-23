@@ -50,5 +50,11 @@ namespace SportsStore.Models
             }
             context.SaveChanges();
         }
+
+        public void Delete(Product product)
+        {
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
     }
 }
