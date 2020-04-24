@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SportsStore.Models
 {
@@ -11,24 +10,26 @@ namespace SportsStore.Models
 
         public DataRepository(DataContext ctx) => context = ctx;
 
-        public IEnumerable<Product> Products => context.Products.ToArray();
+        public IEnumerable<Product> Products => context.Products
+            .Include(p => p.Category).ToArray();
 
-        public Product GetProduct(long key) => context.Products.Find(key);
+        public Product GetProduct(long key) => context.Products
+            .Include(p => p.Category).First(p => p.Id == key);
 
         public void AddProduct(Product product)
         {
-            this.context.Products.Add(product);
-            this.context.SaveChanges();
+            context.Products.Add(product);
+            context.SaveChanges();
         }
 
         public void UpdateProduct(Product product)
         {
-            Product p = GetProduct(product.Id);
+            Product p = context.Products.Find(product.Id);
             p.Name = product.Name;
-            p.Category = product.Category;
+            //p.Category = product.Category;
             p.PurchasePrice = product.PurchasePrice;
             p.RetailPrice = product.RetailPrice;
-            // context.Products.Update(product);
+            p.CategoryId = product.CategoryId;
             context.SaveChanges();
         }
 
