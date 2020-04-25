@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using SportsStore.Models.Pages;
 
 namespace SportsStore.Models
 {
     public interface IRepository
     {
         IEnumerable<Product> Products { get; }
+
+        PagedList<Product> GetProducts(QueryOptions options);
 
         Product GetProduct(long key);
 
