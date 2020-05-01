@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -11,7 +12,7 @@
             <div class="col-auto"><h4>SPORTS STORE</h4></div>
             <div class="col"></div>
             <div class="col-auto text-right">
-                (Cart Goes Here)
+                @await Component.InvokeAsync("Cart", Context.Session)
             </div>
         </div>
     </div>
