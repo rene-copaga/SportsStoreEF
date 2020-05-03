@@ -64,5 +64,24 @@ namespace SportsStore.Models
                     }
                 });
         }
+
+        public long StoreProduct(Product product)
+        {
+            context.Products.Add(product);
+            context.SaveChanges();
+            return product.Id;
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            context.Products.Update(product);
+            context.SaveChanges();
+        }
+
+        public void DeleteProduct(long id)
+        {
+            context.Products.Remove(new Product { Id = id });
+            context.SaveChanges();
+        }
     }
 }
