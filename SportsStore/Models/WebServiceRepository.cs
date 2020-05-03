@@ -1,0 +1,68 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace SportsStore.Models
+{
+    public class WebServiceRepository : IWebServiceRepository
+    {
+        private DataContext context;
+
+        public WebServiceRepository(DataContext ctx) => context = ctx;
+
+        public object GetProduct(long id)
+        {
+            //return context.Products
+            //    .Select(p => new {
+            //        Id = p.Id,
+            //        Name = p.Name,
+            //        Description = p.Description,
+            //        PurchasePrice = p.PurchasePrice,
+            //        RetailPrice = p.RetailPrice})
+            //    .FirstOrDefault(p => p.Id == id);
+
+            //return context.Products.Include(p => p.Category)
+            //    .FirstOrDefault(p => p.Id == id);
+
+            return context.Products.Include(p => p.Category)
+                .Select(p => new
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    PurchasePrice = p.PurchasePrice,
+                    Description = p.Description,
+                    RetailPrice = p.RetailPrice,
+                    CategoryId = p.CategoryId,
+                    Category = new
+                    {
+                        Id = p.Category.Id,
+                        Name = p.Category.Name,
+                        Description = p.Category.Description
+                    }
+                })
+                .FirstOrDefault(p => p.Id == id);
+        }
+
+        public object GetProducts(int skip, int take)
+        {
+            return context.Products.Include(p => p.Category)
+                .OrderBy(p => p.Id)
+                .Skip(skip)
+                .Take(take)
+                .Select(p => new
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    PurchasePrice = p.PurchasePrice,
+                    Description = p.Description,
+                    RetailPrice = p.RetailPrice,
+                    CategoryId = p.CategoryId,
+                    Category = new
+                    {
+                        Id = p.Category.Id,
+                        Name = p.Category.Name,
+                        Description = p.Category.Description
+                    }
+                });
+        }
+    }
+}
